@@ -8,13 +8,15 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        field = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password']
 
-        def validate(self, attrs):
-            email = attrs.get('email', '')
-            username = attrs.get('username', '')
+    def validate(self, attrs):
+        password = attrs.get('password', '')
 
-            return attrs
+        if not password.isalnum():
+            raise serializers.ValidationError('username must be string and integer')
 
-        def create(self, validated_data):
-            return User.objets.create_user(**validated_data)
+        return attrs
+
+    def create(self, validated_data):
+        return User.objects.create_user(**validated_data)

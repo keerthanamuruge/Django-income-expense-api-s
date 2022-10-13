@@ -7,7 +7,7 @@ from django.db import models
 
 class UserManager(BaseUserManager):
 
-    def createuser(self, username, email, password=None):
+    def create_user(self, username, email, password=None):
 
         if username is None:
             raise TypeError('user should have username')
@@ -21,7 +21,7 @@ class UserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_super_user(self, username, email, password):
+    def create_superuser(self, username, email, password):
         if password is None:
             raise TypeError('super user should have password')
 
