@@ -1,9 +1,9 @@
-from django.db import models
-
-# Create your models here.
 from django.contrib.auth.models import (AbstractBaseUser, BaseUserManager, PermissionsMixin)
 
 from django.db import models
+
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 class UserManager(BaseUserManager):
 
@@ -15,7 +15,7 @@ class UserManager(BaseUserManager):
         if email is None:
             raise TypeError('User should have a email')
 
-        user = self.model(username=username, email = self.normalize_email(
+        user = self.model(username=username, email=self.normalize_email(
             email))
         user.set_password(password)
         user.save()
@@ -30,6 +30,7 @@ class UserManager(BaseUserManager):
         user.is_staff = True
         user.save()
         return user
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True, db_index=True)
@@ -48,5 +49,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    def token(self):
-        return ''
+    def tokens(self):
+        refresh = RefreshToken.for_user(self)
+        return {
+            'access_token': str(refresh.access_token),
+            'refresh_token': str(refresh),
+        }
