@@ -55,3 +55,9 @@ class User(AbstractBaseUser, PermissionsMixin):
             'access_token': str(refresh.access_token),
             'refresh_token': str(refresh),
         }
+
+    def get_user(self, user_id):
+        try:
+            return User.objects.get(pk=user_id)
+        except User.DoesNotExist:
+            return None

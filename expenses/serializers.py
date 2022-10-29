@@ -6,4 +6,4 @@ class ExpenseSerializers(serializers.ModelSerializer):
 
     class Meta:
         model = Expenses
-        fields = ['date', 'description', 'amount', 'category']
+        fields = '__all__'

@@ -1,7 +1,7 @@
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.exceptions import AuthenticationFailed
-class TokenValidator:
 
+class TokenValidator:
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -12,13 +12,18 @@ class TokenValidator:
         }
 
     def __call__(self, request):
-        try:
-            auth = JWTAuthentication()
-            user = auth.authenticate(request)
-        except AuthenticationFailed as e:
-            print(e)
-            # todo
-            #  change to logger
+
+        # if request.META.get('HTTP_AUTHORIZATION', False):
+        # try:
+        #     auth = JWTAuthentication()
+        #     user, payload = auth.authenticate(request)
+        #     request.user = user
+        #     request.auth = auth
+        # except AuthenticationFailed as e:
+        #     print(e)
+        #     # todo
+        #     #  change to logger
+        request.user
         response = self.get_response(request)
 
         return response

@@ -7,6 +7,9 @@ from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status, views
 # from rest_framework_simplejwt.tokens import RefreshToken
 # from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import AllowAny
+
 from .serializers import RegisterSerializer, LoginSerializer, VerifyEmailSerializer, EmailVerification
 from rest_framework.response import Response
 from .models import User
@@ -18,7 +21,7 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
-
+@permission_classes((AllowAny,))
 class RegisterView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
@@ -33,7 +36,7 @@ class RegisterView(generics.GenericAPIView):
         user_data['tokens'] = user.tokens()
         return Response(user_data, status=status.HTTP_201_CREATED)
 
-
+@permission_classes((AllowAny,))
 class LoginApiView(generics.GenericAPIView):
     serializer_class = LoginSerializer
 
