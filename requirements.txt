@@ -8,3 +8,4 @@ python-dotenv
 pytz
 sqlparse
 drf-yasg
+django-cors-headers
