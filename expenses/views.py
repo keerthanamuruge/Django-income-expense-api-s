@@ -1,42 +1,31 @@
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication, TokenAuthentication
-from rest_framework.authtoken.views import ObtainAuthToken
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, GenericAPIView
-from rest_framework.views import APIView
-from authentication.models import User
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from .serializers import ExpenseSerializers
 from .models import Expenses
-from rest_framework import permissions, authentication, viewsets, mixins, generics
-from .permissions import IsOwner
-from rest_framework.response import Response
+from rest_framework import permissions
 
 
-
-
-class ExpenseApiview(generics.GenericAPIView, mixins.ListModelMixin,
-                     mixins.CreateModelMixin,
-                     mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin
-                     ):
-# class ExpenseApiview(APIView):
-    queryset = User.objects.all()
+class ExpenseListApiView(ListCreateAPIView):
     serializer_class = ExpenseSerializers
-    authentication_classes = [TokenAuthentication]
+    queryset = Expenses.objects.all()
+    filter_backends = [DjangoFilterBackend]
     permission_classes = [permissions.IsAuthenticated]
 
+    def perform_create(self, serializer):
+        return serializer.save(owner=self.request.user)
+
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
+
+
+class ExpenseDetailApiView(RetrieveUpdateDestroyAPIView):
+    serializer_class = ExpenseSerializers
+    queryset = Expenses.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
     lookup_field = 'id'
 
-    def get(self, request, id=None):
+    def perform_create(self, serializer):
+        return serializer.save(owner=self.request.user)
 
-        if id:
-            return self.retrieve(request)
-        return self.list(request)
-
-    def post(self, request):
-        return self.create(request)
-
-    def put(self, request, id):
-        return self.update(request, id)
-
-    def delete(self, request, id):
-        return self.destroy(request, id)
+    def get_queryset(self):
+        return self.queryset.filter(owner=self.request.user)
