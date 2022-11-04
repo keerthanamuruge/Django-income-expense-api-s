@@ -9,3 +9,4 @@ pytz
 sqlparse
 drf-yasg
 django-cors-headers
+django_filter
