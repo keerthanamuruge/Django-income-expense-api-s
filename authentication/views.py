@@ -54,7 +54,6 @@ class VerifyEmail(generics.GenericAPIView):
 
     def post(self, request):
         user_email = request.data
-        serializer = self.serializer_class(data=user_email)
         user = User.objects.get(email=user_email['email'])
         token = user.tokens()
         response_data={}
