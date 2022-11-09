@@ -1,11 +1,10 @@
-from django.test import SimpleTestCase
 from django.urls import reverse, resolve
 from rest_framework_simplejwt.views import TokenRefreshView
 
 from authentication.views import RegisterView, LoginApiView, VerifyEmail, EmailVerify
 
 
-class TestAuthUrls(SimpleTestCase):
+class TestAuthUrls:
 
     def test_register_urls(self):
         url = reverse('register')

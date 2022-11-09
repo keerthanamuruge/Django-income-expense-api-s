@@ -23,8 +23,8 @@ def custom_exception_handler(exc, context):
             handlers[exception_class](exc, context, response)
             return response
         response.data = {
-            "error": exc.default_detail,
-            "code": exc.default_code
+            "error": exc.default_detail if hasattr(exc, 'default_detail') else str(exc),
+            "code": exc.default_code if hasattr(exc, 'default_code') else str(exc)
         }
     logger.exception(exc)
     return response
