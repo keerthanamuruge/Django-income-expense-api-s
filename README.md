@@ -10,7 +10,7 @@
 + upgrade pip
 + install requirements
 
-  -<code>$ python -r requirements.txt</code>
+  - <code>$ python -r requirements.txt</code>
 
 + create and connect with db
 + migrate db
@@ -18,7 +18,7 @@
   - <code> $ python manage.py makemigration</code>
   - <code> $ python manage.py migrate </code>
   
- + runserver
++ runserver
  
   - <code> $ python manage.py runserver </code>
 
