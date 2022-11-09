@@ -30,7 +30,7 @@ def custom_exception_handler(exc, context):
     return response
 
 def _handle_generic_error(exception, context, response):
-    response.data = {"error": exception.detail}
+    response.data = {"error": exception.detail, "code": exception.default_code}
     logger.warning(exception)
     return response.data
 

@@ -21,6 +21,7 @@ from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
+
 @permission_classes((AllowAny,))
 class RegisterView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
@@ -36,6 +37,7 @@ class RegisterView(generics.GenericAPIView):
         user_data['tokens'] = user.tokens()
         return Response(user_data, status=status.HTTP_201_CREATED)
 
+
 @permission_classes((AllowAny,))
 class LoginApiView(generics.GenericAPIView):
     serializer_class = LoginSerializer
@@ -50,6 +52,7 @@ class LoginApiView(generics.GenericAPIView):
 
 
 class VerifyEmail(generics.GenericAPIView):
+    """ Help to send verification link to email """
     serializer_class = VerifyEmailSerializer
 
     def post(self, request):
@@ -76,6 +79,7 @@ class VerifyEmail(generics.GenericAPIView):
 
 
 class EmailVerify(views.APIView):
+    """ Used to verify your email """
     serializer_class = EmailVerification
 
     token_param_config = openapi.Parameter('token', in_=openapi.IN_QUERY,
