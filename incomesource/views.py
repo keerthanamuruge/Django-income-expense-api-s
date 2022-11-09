@@ -3,7 +3,7 @@ from rest_framework.response import Response
 
 from .serializers import IncomeSerializers
 from .models import Income
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, status
 
 
 class IncomelistApiView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin,
@@ -16,10 +16,10 @@ class IncomelistApiView(generics.GenericAPIView, mixins.ListModelMixin, mixins.C
         return self.list(request)
 
     def post(self, request):
-        if request.data['owner'] == request.user.id:
+        if request.data['owner'] == str(request.user.id):
             return self.create(request, owner=self.request.user)
         else:
-            return Response({"owner": "invalid user id"})
+            return Response({"owner": "invalid user id"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class IncomeDetailApiView(generics.GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin,

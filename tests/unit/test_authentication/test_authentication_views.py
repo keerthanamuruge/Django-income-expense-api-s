@@ -9,7 +9,7 @@ from authentication.models import User
 import json
 from authentication.views import RegisterView, LoginApiView, VerifyEmail, EmailVerify
 
-pytestmark = pytest.mark.django_db
+pytestmark = [pytest.mark.django_db, pytest.mark.unit]
 
 
 class TestRegsiterViews:
@@ -40,4 +40,38 @@ class TestRegsiterViews:
                 'refresh_token': ANY
                 }
             }
+
+
+class TestLoginApiView:
+
+    def test_login_api_with_correct_request(self, api_client, create_user):
+        user, password = create_user
+        response = api_client.post(reverse('login'), {
+            "email": user.email,
+            "password": password
+            })
+
+        assert response.status_code == status.HTTP_200_OK
+        assert response.data.get('username') == user.username
+        assert response.data.get('email') == user.email
+        assert response.data.get('tokens').keys()
+
+
+    def test_login_api_with_wrong_email(self, api_client, create_user):
+        user, password = create_user
+        response = api_client.post(reverse('login'), {
+            "email": "income@gmail.com",
+            "password": password
+            })
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.data.get('error') == 'please login to continue'
+
+    def test_login_api_with_wrong_password(self, api_client, create_user):
+        user, password = create_user
+        response = api_client.post(reverse('login'), {
+            "email": user.email,
+            "password": "password"
+            })
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+        assert response.data.get('error') == 'please login to continue'
 
