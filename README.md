@@ -10,7 +10,7 @@
 + upgrade pip
 + install requirements
 
-  - <code>$ python -r requirements.txt</code>
+  - <code>$ pip install -r requirements.txt</code>
 
 + create and connect with db
 + migrate db
